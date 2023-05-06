@@ -18,6 +18,7 @@ extern uint8_t ws2812_send;
 
 uint32_t ws2812_spi_get_led(uint16_t index);
 void ws2812_spi_set_led(uint16_t index, uint32_t color);
+void ws2812_spi_set_all(uint32_t color);
 void ws2812_spi_send(SPI_HandleTypeDef *hspi);
 
 #endif

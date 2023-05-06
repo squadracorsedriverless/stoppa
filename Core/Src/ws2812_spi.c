@@ -1,5 +1,4 @@
 #include "ws2812_spi.h"
-#include <string.h>
 
 uint8_t ws2812_buffer[WS2812_BUF_LEN] = {0};
 uint8_t ws2812_empty[WS2812_BUF_LEN] = {0};
@@ -12,7 +11,14 @@ void ws2812_spi_set_led(uint16_t index, uint32_t color)
 {
     for (uint8_t i = 0; i < 24; i++)
     {
-        ws2812_buffer[(index * 24) + i] = ((color >> (24 - i)) & 0b1) ? 0b11111100 : 0b111000000;
+        ws2812_buffer[(index * 24) + i] = ((color >> (24 - i)) & 1) ? 0b11111100 : 0b111000000;
+    }
+}
+void ws2812_spi_set_all(uint32_t color)
+{
+    for (uint16_t i = 0; i < WS2812_STRIP_LEN; i++)
+    {
+        ws2812_spi_set_led(i, color);
     }
 }
 
