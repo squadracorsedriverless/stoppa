@@ -13,7 +13,7 @@
 #define WS2812_GREEN(color) (((uint32_t)color << 16) & 0xFF)
 #define WS2812_BLUE(color) (((uint32_t)color) & 0xFF)
 
-extern uint8_t ws2812_buffer[WS2812_BUF_LEN];
+extern uint8_t ws2812_buffer[WS2812_BUF_LEN + 1];
 extern uint8_t ws2812_send;
 
 uint32_t ws2812_spi_get_led(uint16_t index);

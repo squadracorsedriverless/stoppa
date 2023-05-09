@@ -4,13 +4,13 @@
 #include "utils.h"
 #include "ws2812_spi.h"
 
-void can_recv(CAN_HandleTypeDef *hcan)
+void can_recv(CAN_HandleTypeDef *hcan, uint8_t fifo)
 {
-    static CAN_RxHeaderTypeDef RxHeader;
+    CAN_RxHeaderTypeDef RxHeader;
+    uint8_t RxData[8] = {0};
     static uint8_t newcolor = 0;
-    static uint8_t RxData[8] = {0};
 
-    if (HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
+    if (HAL_CAN_GetRxMessage(hcan, fifo, &RxHeader, RxData) != HAL_OK)
     {
         /* Transmission request Error */
         HAL_CAN_ResetError(hcan);
@@ -24,15 +24,15 @@ void can_recv(CAN_HandleTypeDef *hcan)
     }
     else if ((RxHeader.StdId == CAN_AS_STATE_ID) && (RxHeader.DLC == 1))
     {
-        if (as_state != RxData[1])
+        if (as_state != RxData[0])
         {
-            as_state = RxData[1];
+            as_state = RxData[0];
             newcolor = 1;
 
             ws2812_spi_set_all(assi_color[as_state]);
         }
     }
-    else if ((RxHeader.StdId == CAN_ASSI_SYNC_ID) && (RxHeader.DLC == 1))
+    else if (RxHeader.StdId == CAN_ASSI_SYNC_ID && RxHeader.DLC == 1)
     {
         if (as_state == AS_DRIVING || as_state == AS_EMERGENCY)
         {
@@ -49,9 +49,8 @@ void can_recv(CAN_HandleTypeDef *hcan)
 
 void can_msg_send(CAN_HandleTypeDef *hcan, uint16_t id, uint8_t aData[], uint8_t dlc, uint32_t TimeOut)
 {
-    static CAN_TxHeaderTypeDef TxHeader;
-    static uint32_t tx_mailbox;
-
+    CAN_TxHeaderTypeDef TxHeader;
+    uint32_t tx_mailbox;
     static uint32_t can_counter_100us = 0;
     can_counter_100us = tick_get_100us();
 
@@ -82,9 +81,9 @@ void can_msg_send(CAN_HandleTypeDef *hcan, uint16_t id, uint8_t aData[], uint8_t
 
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    can_recv(hcan);
+    can_recv(hcan, CAN_RX_FIFO1);
 }
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-    can_recv(hcan);
+    can_recv(hcan, CAN_RX_FIFO0);
 }

@@ -52,7 +52,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-as_state_t as_state = AS_READY;
+as_state_t as_state = AS_OFF;
 
 uint32_t assi_color[AS_STATE_NUM] = {
     [AS_OFF] = WS2812_COLOR(0, 0, 0),
@@ -74,7 +74,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM6) // assi sync
     {
-        if (utils_is_master())
+        if (0 && utils_is_master())
         {
             static uint8_t alt = 0;
             can_msg_send(&hcan1, CAN_ASSI_SYNC_ID, &alt, 1, 20);
@@ -129,8 +129,8 @@ int main(void)
     HAL_TIM_Base_Start_IT(&htim7);
     HAL_CAN_Start(&hcan1);
 
-    // DEBUG
-    can_msg_send(&hcan1, CAN_AS_STATE_ID, (uint8_t *)&as_state, 1, 100);
+    ws2812_spi_set_all(WS2812_COLOR(0, 0, 0));
+    ws2812_spi_send(&hspi1);
     /* USER CODE END 2 */
 
     /* Infinite loop */
@@ -138,7 +138,9 @@ int main(void)
     while (1)
     {
         HAL_IWDG_Refresh(&hiwdg);
-        visHandle();
+
+        if (as_state == AS_TEST)
+            visHandle();
 
         /* USER CODE END WHILE */
 
@@ -166,14 +168,13 @@ void SystemClock_Config(void)
     /** Initializes the RCC Oscillators according to the specified parameters
      * in the RCC_OscInitTypeDef structure.
      */
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_LSI;
-    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-    RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI | RCC_OSCILLATORTYPE_HSE;
+    RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
     RCC_OscInitStruct.LSIState = RCC_LSI_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-    RCC_OscInitStruct.PLL.PLLM = 1;
-    RCC_OscInitStruct.PLL.PLLN = 10;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLM = 5;
+    RCC_OscInitStruct.PLL.PLLN = 32;
     RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
     RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
     RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;

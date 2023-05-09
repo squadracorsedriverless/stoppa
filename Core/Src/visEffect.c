@@ -60,10 +60,6 @@ void visRainbow(uint32_t effectLength)
         uint32_t color = Wheel(((i * 256) / effectLength + x) & 0xFF);
 
         ws2812_spi_set_led(i, WS2812_COLOR(Red(color), Green(color), Blue(color)));
-
-        // frameBuffer[i * 3 + 0] = color & 0xFF;
-        // frameBuffer[i * 3 + 1] = color >> 8 & 0xFF;
-        // frameBuffer[i * 3 + 2] = color >> 16 & 0xFF;
     }
 }
 
