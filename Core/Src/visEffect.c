@@ -55,7 +55,7 @@ void visRainbow(uint32_t effectLength)
     if (x >= 256 * 5)
         x = 0;
 
-    for (i = 0; i < WS2812_STRIP_LEN * 24; i++)
+    for (i = 0; i < WS2812_BUF_LEN / 3; i++)
     {
         uint32_t color = Wheel(((i * 256) / effectLength + x) & 0xFF);
 
@@ -101,8 +101,8 @@ void visHandle2()
     {
         timestamp = HAL_GetTick();
 
-        visRainbow(32);
-        // visDots(50, 40);
+        visRainbow(WS2812_STRIP_LEN);
+        HAL_Delay(10);
         /*
                 switch(visSelect)
                 {

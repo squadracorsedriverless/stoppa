@@ -38,21 +38,6 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 
-    typedef enum
-    {
-        AS_OFF = 1,
-        AS_READY,
-        AS_DRIVING,
-        AS_EMERGENCY,
-        AS_FINISHED,
-        AS_TEST,
-        AS_STATE_NUM
-    } as_state_t;
-
-    extern as_state_t as_state;
-
-    extern uint32_t assi_color[AS_STATE_NUM];
-
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -73,10 +58,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BOARD_ID_0_Pin GPIO_PIN_3
-#define BOARD_ID_0_GPIO_Port GPIOA
-#define BOARD_ID_1_Pin GPIO_PIN_4
-#define BOARD_ID_1_GPIO_Port GPIOA
+#define BOARD_ID_1_Pin GPIO_PIN_14
+#define BOARD_ID_1_GPIO_Port GPIOC
+#define BOARD_ID_2_Pin GPIO_PIN_15
+#define BOARD_ID_2_GPIO_Port GPIOC
+#define LED_DATA_Pin GPIO_PIN_7
+#define LED_DATA_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

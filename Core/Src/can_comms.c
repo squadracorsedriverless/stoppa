@@ -1,14 +1,12 @@
 #include "can_comms.h"
+#include "assi.h"
 #include "main.h"
-#include "spi.h"
 #include "utils.h"
-#include "ws2812_spi.h"
 
 void can_recv(CAN_HandleTypeDef *hcan, uint8_t fifo)
 {
     CAN_RxHeaderTypeDef RxHeader;
     uint8_t RxData[8] = {0};
-    static uint8_t newcolor = 0;
 
     if (HAL_CAN_GetRxMessage(hcan, fifo, &RxHeader, RxData) != HAL_OK)
     {
@@ -24,26 +22,11 @@ void can_recv(CAN_HandleTypeDef *hcan, uint8_t fifo)
     }
     else if ((RxHeader.StdId == CAN_AS_STATE_ID) && (RxHeader.DLC == 1))
     {
-        if (as_state != RxData[0])
-        {
-            as_state = RxData[0];
-            newcolor = 1;
-
-            ws2812_spi_set_all(assi_color[as_state]);
-        }
+        assi_set_state(RxData[0]);
     }
     else if (RxHeader.StdId == CAN_ASSI_SYNC_ID && RxHeader.DLC == 1)
     {
-        if (as_state == AS_DRIVING || as_state == AS_EMERGENCY)
-        {
-            newcolor = 1;
-            ws2812_spi_set_all(RxData[0] ? assi_color[as_state] : WS2812_COLOR(0, 0, 0));
-        }
-        if (newcolor)
-        {
-            ws2812_spi_send(&hspi1);
-            newcolor = 0;
-        }
+        assi_sync(RxData[0]);
     }
 }
 

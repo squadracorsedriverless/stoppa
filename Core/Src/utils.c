@@ -39,7 +39,7 @@ static uint8_t board_master;
 
 void utils_init()
 {
-    board_master = (0b00 == (HAL_GPIO_ReadPin(BOARD_ID_1_GPIO_Port, BOARD_ID_1_Pin) << 1 | HAL_GPIO_ReadPin(BOARD_ID_0_GPIO_Port, BOARD_ID_0_Pin))) ? 1 : 0;
+    board_master = 0b00 == (HAL_GPIO_ReadPin(BOARD_ID_2_GPIO_Port, BOARD_ID_2_Pin) << 1 | HAL_GPIO_ReadPin(BOARD_ID_1_GPIO_Port, BOARD_ID_1_Pin));
 }
 
 uint8_t utils_is_master()
