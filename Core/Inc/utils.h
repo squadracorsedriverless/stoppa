@@ -5,7 +5,5 @@
 extern uint32_t tick_100us;
 uint8_t delay_fun(uint32_t *delay_100us_last, uint32_t delay_100us);
 uint32_t tick_get_100us(void);
-void utils_init();
-uint8_t utils_is_master();
 
 #endif

@@ -31,7 +31,6 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "ws2812_spi.h"
 
 /* USER CODE END Includes */
 
@@ -58,12 +57,10 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define BOARD_ID_1_Pin GPIO_PIN_14
-#define BOARD_ID_1_GPIO_Port GPIOC
-#define BOARD_ID_2_Pin GPIO_PIN_15
-#define BOARD_ID_2_GPIO_Port GPIOC
-#define LED_DATA_Pin GPIO_PIN_7
-#define LED_DATA_GPIO_Port GPIOA
+#define BRAKE_PRESS_Pin GPIO_PIN_2
+#define BRAKE_PRESS_GPIO_Port GPIOA
+#define BRAKE_Pin GPIO_PIN_8
+#define BRAKE_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

@@ -1,5 +1,4 @@
 #include "can_comms.h"
-#include "assi.h"
 #include "main.h"
 #include "utils.h"
 
@@ -19,14 +18,6 @@ void can_recv(CAN_HandleTypeDef *hcan, uint8_t fifo)
     if ((RxHeader.StdId == CAN_BOOTLOADER_ID) && (RxHeader.DLC == 2) && (RxData[0] == 0xFF) && (RxData[1] == 0x00))
     {
         NVIC_SystemReset();
-    }
-    else if ((RxHeader.StdId == CAN_AS_STATE_ID) && (RxHeader.DLC == 1))
-    {
-        assi_set_state(RxData[0]);
-    }
-    else if (RxHeader.StdId == CAN_ASSI_SYNC_ID && RxHeader.DLC == 1)
-    {
-        assi_sync(RxData[0]);
     }
 }
 
